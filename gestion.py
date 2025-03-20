@@ -83,6 +83,7 @@ def modificar_pedidos():
                         pedido_encontrado = pedido
                         break
                 if pedido_encontrado:
+                    print(modi_pedidos)
                     opc=input("por favor ingrese la opccion que desea modificar")
                     if opc=="1":
                         while True:
@@ -90,18 +91,37 @@ def modificar_pedidos():
                             op=input("escoja por favor: ")
                             if op=="1":
                                 num_linea=int(input("ingresa el nuevo numero de linea: "))
-
+                                for detalle in pedido_encontrado["detalles_pedido"]:
+                                    if detalle["numero_linea"] == num_linea:
+                                        detalle["numero_linea"] = num_linea
+                                        print(f"El número de línea {num_linea} ha sido actualizado.")
                             elif op=="2":
                                 code_producto=input("ingrese el nuevo codigo del producto: ")
+                                for detalle in pedido_encontrado["detalles_pedido"]:
+                                    if detalle["codigo_producto"] == code_producto:
+                                        detalle["codigo_producto"] = code_producto
+                                        print(f"El código de producto ha sido actualizado a {code_producto}.")
                             elif op=="3":
                                 cantidad=int(input("ingresa la nueva cantidad: "))
+                                for detalle in pedido_encontrado["detalles_pedido"]:
+                                    if detalle["cantidad"] == cantidad:
+                                        detalle["cantidad"] = cantidad
+                                        print(f"La cantidad ha sido actualizada a {cantidad}.")
                             elif op=="4":
                                 print("terminando modificaciones...")
                                 break
                     elif opc=="2":
-                        print("editar codigo cliente")
+                        code_cliente=input("ingresa el nuevo codigo del cliente: ")
+                        for pedido in pedido_encontrado["codigo_cliente"]:
+                             if pedido["codigo_cliente"] == code_cliente:
+                                    pedido["codigo_cliente"] = code_cliente
+                                    print(f"el codigo del cliente ha sido actualizado {code_cliente}.")
                     elif opc=="3":
-                        print("editar fecha")
+                        fecha=input("ingrese la nueva fecha: ")
+                        for pedido in pedido_encontrado["fecha_pedido"]:
+                             if pedido["fecha_pedido"] == fecha:
+                                    pedido["fecha_pedido"] = fecha
+                                    print(f"la fecha se ha actualizado {fecha}.")
                     elif opc=="4":
                         print("volviendo a la modificacion de pedidos")
                         break
@@ -114,6 +134,28 @@ def modificar_pedidos():
             break
         else: 
             print("vuelva a intentarlo")        
+
+def eliminar_pedidos():
+    code_pedido=input("ingrese el codigo del pedido a eliminar: ")
+    pedido_encontrado=None
+    for pedido in pedidos:
+        if pedido["codigo_pedido"] == code_pedido:
+            pedido_encontrado = pedido
+            break
+    if pedido_encontrado:   
+        pedidos.remove(pedido_encontrado)
+        print("el pedido fue eliminado exitosamente")  
+    else:
+        print ("el pedido no existe o ya fue elimnado anteriormente")
+
+modi_pedidos="""
+**********************************************
+1. editar detalles del pedido
+2. editar codigo del cliente
+3. editar fecha del pedido
+4. volver al menu de gestion de pedidos
+**********************************************
+"""
 
 sub_menu_modi="""
 **********************************
