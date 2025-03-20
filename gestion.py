@@ -42,8 +42,3 @@ def pedir():
             break
         else:
             print("esa opccion no esta disponible intente de nuevo")
-
-
-
-        
-        
