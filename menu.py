@@ -1,4 +1,4 @@
-from gestion import pedir
+from gestion import pedir, mostrar_pedidos, modificar_pedidos
 
 menu_principal= """
 ************Bienvenid@ a la Panaderia delicias caceras*************
@@ -69,11 +69,21 @@ def opcion_pedidos():
         if opc2=="1":
             pedir()
         elif opc2=="2":
-            print("pedidos")
+            mostrar_pedidos()
         elif opc2=="3":
-            print("modificando pedidos")
+            print(modi_pedidos)
+            modificar_pedidos()
         elif opc2=="4":
             print("Regresando al menu principal...")
             break
         else:
             print("¡¡LA OPCION NO EXISTE POR FAVOR DIGITE UNA OPCCION CORRECTA!!") 
+
+modi_pedidos="""
+**********************************************
+1. editar detalles del pedido
+2. editar codigo del cliente
+3. editar fecha del pedido
+4. volver al menu de gestion de pedidos
+**********************************************
+"""
