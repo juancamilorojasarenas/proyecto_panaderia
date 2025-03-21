@@ -1,3 +1,4 @@
+from registro import registrar, mostrar_productos
 from gestion import pedir, mostrar_pedidos, modificar_pedidos, eliminar_pedidos
 
 menu_principal= """
@@ -54,9 +55,9 @@ def opcion_productos():
         print (menu_productos)
         opc1=input("Ingrese la opcion deseada: ")    
         if opc1=="1":
-            print("resgistro")
+            registrar()
         elif opc1=="2":
-            print("inventario")
+            mostrar_productos()
         elif opc1=="3":
             print("Regresando al menu principal...")
             break
