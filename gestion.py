@@ -1,4 +1,5 @@
 import json
+from registro import productos, guardar_productos
 
 def cargar_pedidos():
     try:
@@ -35,9 +36,19 @@ def detalles_pedido():
 
     if pedido_encontrado:
         code_producto = input("Ingrese el código del producto: ")
+        producto_encontrado = next((p for p in productos if p["codigo_producto"] == code_producto), None)
+        if not producto_encontrado:
+            print("el producto no existe en el inventario")
+            return
+        
         cantidad = int(input("Ingrese la cantidad del producto: "))
-        precio = int(input("Precio: "))
+        if cantidad > producto_encontrado["cantidad_en_stock"]:
+            print(f"⚠️ Error: Stock insuficiente. Solo hay {producto_encontrado['cantidad_en_stock']} unidades disponibles.")
+            return
+        precio = producto_encontrado["precio_venta"]
         num_linea = int(input("Ingrese el número de línea del pedido: "))
+        producto_encontrado["cantidad_en_stock"] -= cantidad
+        guardar_productos()
 
         detalle = {
             "codigo_producto": code_producto,
@@ -151,9 +162,16 @@ def eliminar_pedidos():
     pedido_encontrado = next((p for p in pedidos if p["codigo_pedido"] == code_pedido), None)
 
     if pedido_encontrado:   
+        for detalle in pedido_encontrado["detalles_pedido"]:
+            producto = next((p for p in productos if p["codigo_producto"] == detalle["codigo_producto"]), None)
+            if producto:
+                producto["cantidad_en_stock"] += detalle["cantidad"]
+                
         pedidos.remove(pedido_encontrado)
         guardar_pedidos()
+        guardar_productos()
         print("El pedido fue eliminado exitosamente.")  
+        
     else:
         print("El pedido no existe o ya fue eliminado anteriormente.")
 
