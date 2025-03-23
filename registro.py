@@ -36,7 +36,7 @@ def registrar():
                         precio_provedor=int(input("ingrese el precio del provedor: "))
 
                         if stock < 0 or precio_venta < 0 or precio_provedor < 0:
-                            print("Error: Los valores numéricos deben ser positivos.")
+                            print("Los valores numéricos deben ser positivos.")
                             continue
 
                 except ValueError:
@@ -85,4 +85,81 @@ def eliminar_producto():
     else:
         print("El pedido no existe o ya fue eliminado anteriormente.")       
         
-                  
+def modificar_producto():
+    while True:
+        code_producto = input("Ingrese el código del producto a modificar: ")
+        producto_encontrado = next((p for p in productos if p["codigo_producto"] == code_producto), None)
+        
+        if not producto_encontrado:
+            print("El producto no existe.")
+            return
+
+        print("""
+        **************MODIFICAR PRODUCTO****************
+        ************************************************
+        escoja la opcion
+        1. cambiar el nombre 
+        2. cambiar la categoria
+        3. cambiar la descripcon
+        4. cambiar el provedor
+        5. cambiar la cantidad en stock
+        6. cambiar el precio de venta
+        7. cambiar el precio del proveedor
+        8. volver al menu principal
+        ************************************************
+        ************************************************
+        """      
+    )
+        opcion = input("Ingrese la opccion que desea modificar: ")
+
+        if opcion == "1":
+            nuevo_nombre = input("Ingrese el nuevo nombre: ")
+            producto_encontrado["nombre"] = nuevo_nombre
+        elif opcion == "2":
+            nueva_categoria = input("Ingrese la nueva categoría: ")
+            producto_encontrado["categoria"] = nueva_categoria
+        elif opcion == "3":
+            nueva_descripcion = input("Ingrese la nueva descripción: ")
+            producto_encontrado["descripcion"] = nueva_descripcion
+        elif opcion == "4":
+            nuevo_proveedor = input("Ingrese el nuevo proveedor: ")
+            producto_encontrado["proveedor"] = nuevo_proveedor
+        elif opcion == "5":
+            try:
+                nueva_cantidad = int(input("Ingrese la nueva cantidad en stock: "))
+                if nueva_cantidad < 0:
+                    print("La cantidad no puede ser negativa.")
+                    continue
+                producto_encontrado["cantidad_en_stock"] = nueva_cantidad
+            except ValueError:
+                print("Ingrese un número válido.")
+                continue
+        elif opcion == "6":
+            try:
+                nuevo_precio_venta = float(input("Ingrese el nuevo precio de venta: "))
+                if nuevo_precio_venta < 0:
+                    print("El precio no puede ser negativo.")
+                    continue
+                producto_encontrado["precio_venta"] = nuevo_precio_venta
+            except ValueError:
+                print("Ingrese un número válido.")
+                continue
+        elif opcion == "7":
+            try:
+                nuevo_precio_proveedor = float(input("Ingrese el nuevo precio del proveedor: "))
+                if nuevo_precio_proveedor < 0:
+                    print("El precio no puede ser negativo.")
+                    continue
+                producto_encontrado["precio_proveedor"] = nuevo_precio_proveedor
+            except ValueError:
+                print("Ingrese un número válido.")
+                continue
+        elif opcion == "8":
+            print("Volviendo al menu principal...")
+            break
+        else:
+            print("Opción no válida. Intente de nuevo.")
+            continue
+
+        guardar_productos()
+        print("Producto modificado exitosamente.")   

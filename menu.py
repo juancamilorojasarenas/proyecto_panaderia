@@ -1,4 +1,4 @@
-from registro import registrar, mostrar_productos, eliminar_producto
+from registro import registrar, mostrar_productos, eliminar_producto, modificar_producto
 from gestion import pedir, mostrar_pedidos, modificar_pedidos, eliminar_pedidos
 
 menu_principal= """
@@ -67,7 +67,7 @@ def opcion_productos():
         elif opc1=="4":
             eliminar_producto() 
         elif opc1=="5":
-             print("modificar")    
+            modificar_producto()   
         elif opc1=="6":
             print("Regresando al menu principal...")
             break

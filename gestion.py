@@ -23,7 +23,8 @@ def agregar_pedido():
         "codigo_pedido": code_pedido,
         "codigo_cliente": code_cliente,
         "fecha_pedido": fecha,
-        "detalles_pedido": []
+        "detalles_pedido": [],
+        "total": 0.0
     }
 
     pedidos.append(pedido)
@@ -40,13 +41,21 @@ def detalles_pedido():
         if not producto_encontrado:
             print("el producto no existe en el inventario")
             return
-        
-        cantidad = int(input("Ingrese la cantidad del producto: "))
-        if cantidad > producto_encontrado["cantidad_en_stock"]:
-            print(f"⚠️ Error: Stock insuficiente. Solo hay {producto_encontrado['cantidad_en_stock']} unidades disponibles.")
+        try:
+            cantidad = int(input("Ingrese la cantidad del producto: "))
+            if cantidad <= 0:
+                print("la cantidad debe ser mayor a 0")
+                return
+            if cantidad > producto_encontrado["cantidad_en_stock"]:
+                print(f"Stock insuficiente. Solo hay {producto_encontrado['cantidad_en_stock']} unidades disponibles.")
+                return
+            num_linea = int(input("Ingrese el número de línea del pedido: "))
+        except ValueError:
+            print("por favor ingrese valores numericos")
             return
+            
         precio = producto_encontrado["precio_venta"]
-        num_linea = int(input("Ingrese el número de línea del pedido: "))
+        
         producto_encontrado["cantidad_en_stock"] -= cantidad
         guardar_productos()
 
@@ -58,6 +67,7 @@ def detalles_pedido():
         }
         
         pedido_encontrado["detalles_pedido"].append(detalle)
+        pedido_encontrado["total"] = sum(d["precio_unidad"] * d["cantidad"] for d in pedido_encontrado["detalles_pedido"])
         guardar_pedidos()
         print("El detalle del pedido fue agregado exitosamente.")
     else: 
@@ -85,10 +95,17 @@ def pedir():
 
 def mostrar_pedidos():
     if not pedidos:
-        print("No hay pedidos registrados.")
+        print(" o hay pedidos registrados.")
     else:
+        print("\n************LISTA DE PEDIDOS ************")
+        print("Código       | Cliente     | Fecha        | Total      ")
+        print("------------|------------|-------------|------------")
+
         for p in pedidos:
-            print(f"Código: {p['codigo_pedido']}, Cliente: {p['codigo_cliente']}, Fecha: {p['fecha_pedido']}")
+            print(f"{p['codigo_pedido'].ljust(12)} | {p['codigo_cliente'].ljust(10)} | {p['fecha_pedido'].ljust(12)} | ${str(p['total']).ljust(10)}")
+
+        print("**********************************************")
+
 
 def modificar_pedidos():
     while True:
@@ -115,38 +132,71 @@ def modificar_pedidos():
                             print("Número de línea actualizado.")
                         else:
                             print("Número de línea no encontrado.")
+                        guardar_pedidos()
 
                     elif op == "2":
                         code_producto = input("Ingrese el nuevo código del producto: ")
                         for detalle in pedido_encontrado["detalles_pedido"]:
                             detalle["codigo_producto"] = code_producto
                         print("Código del producto actualizado.")
+                        guardar_pedidos()
 
                     elif op == "3":
-                        cantidad = int(input("Ingrese la nueva cantidad: "))
-                        for detalle in pedido_encontrado["detalles_pedido"]:
-                            detalle["cantidad"] = cantidad
-                        print("Cantidad actualizada.")
+                        num_linea = int(input("Ingrese el número de línea a modificar: "))
+                        detalle = next((d for d in pedido_encontrado["detalles_pedido"] if d["numero_linea"] == num_linea), None)
 
+                        if not detalle:
+                            print("Número de línea no encontrado.")
+                            return
+
+                        producto = next((p for p in productos if p["codigo_producto"] == detalle["codigo_producto"]), None)
+
+                        if not producto:
+                            print("Producto no encontrado en el inventario.")
+                            return
+
+                        producto["cantidad_en_stock"] += detalle["cantidad"]
+
+                        try:
+                            nueva_cantidad = int(input("Ingrese la nueva cantidad: "))
+                            if nueva_cantidad <= 0:
+                                print("La cantidad debe ser mayor a 0.")
+                                return
+
+                            if nueva_cantidad > producto["cantidad_en_stock"]:
+                                print(f"Stock insuficiente. Solo hay {producto['cantidad_en_stock']} unidades disponibles.")
+                                return
+                            
+                            producto["cantidad_en_stock"] -= nueva_cantidad
+                            detalle["cantidad"] = nueva_cantidad
+                            pedido_encontrado["total"] = sum(d["precio_unidad"] * d["cantidad"] for d in pedido_encontrado["detalles_pedido"])
+                            guardar_productos()
+                            guardar_pedidos()
+                            print("la cantidad ha sido  actualizada correctamente.")
+
+                        except ValueError:
+                            print("Ingrese solo números.")    
+                            return
+                                
                     elif op == "4":
                         print("Terminando modificaciones...")
-
+                        break
+                    
                 elif opc == "2":
                     code_cliente = input("Ingrese el nuevo código del cliente: ")
                     pedido_encontrado["codigo_cliente"] = code_cliente
                     print("Código del cliente actualizado.")
+                    guardar_pedidos()
 
                 elif opc == "3":
                     fecha = input("Ingrese la nueva fecha: ")
                     pedido_encontrado["fecha_pedido"] = fecha
                     print("Fecha actualizada.")
+                    guardar_pedidos()
 
                 elif opc == "4":
                     print("Volviendo a la modificación de pedidos.")
                     break
-
-                guardar_pedidos()
-
             else:
                 print("Pedido no encontrado.")
         

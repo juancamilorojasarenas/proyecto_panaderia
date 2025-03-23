@@ -1,0 +1,12 @@
+[
+    {
+        "codigo_producto": "Pn-001",
+        "nombre": "pan dulce",
+        "categoria": "pan",
+        "descripcion": "es un pan de dulce basico",
+        "proveedor": "panaderia flor",
+        "cantidad_en_stock": 120,
+        "precio_venta": 2200.0,
+        "precio_proveedor": 2000
+    }
+]
