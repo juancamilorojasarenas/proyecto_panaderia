@@ -242,3 +242,57 @@ sub_menu_modi = """
 4. Terminar modificaciones
 *********************************
 """
+def buscar_pedidos():
+    if not pedidos:
+        print("No hay pedidos registrados.")
+        return
+    
+    print(
+        """
+        ************ BÚSQUEDA DE PEDIDOS ************
+        *********************************************
+        escoja
+        1. buscar por codigo de pedido
+        2. buscar por codigo de cliente
+        3. buscar por fecha
+        4. buscar por producto
+        5. volver al menu principal
+        *********************************************
+        *********************************************
+        """
+    )
+    opcion = input("\nSeleccione una opción: ").strip()
+
+    if opcion == "1":
+        codigo = input("Ingrese el código del pedido: ").strip()
+        resultados = [p for p in pedidos if p["codigo_pedido"] == codigo]
+
+    elif opcion == "2":
+        cliente = input("Ingrese el código del cliente: ").strip()
+        resultados = [p for p in pedidos if p["codigo_cliente"] == cliente]
+
+    elif opcion == "3":
+        fecha = input("Ingrese la fecha del pedido (YYYY-MM-DD): ").strip()
+        resultados = [p for p in pedidos if p["fecha_pedido"] == fecha]
+
+    elif opcion == "4":
+        producto = input("Ingrese el código del producto: ").strip()
+        resultados = [p for p in pedidos if any(d["codigo_producto"] == producto for d in p["detalles_pedido"])]
+
+    elif opcion == "5":
+        print("Volviendo al menú...")
+        return
+    else:
+        print("Opción inválida. Intente de nuevo.")
+        return
+    
+    if resultados:
+        print("\n************ RESULTADOS DE LA BÚSQUEDA ************")
+        print("Código       | Cliente     | Fecha        | Total      ")
+        print("------------|------------|-------------|------------")
+        for p in resultados:
+            print(f"{p['codigo_pedido'].ljust(12)} | {p['codigo_cliente'].ljust(10)} | {p['fecha_pedido'].ljust(12)} | ${str(p['total']).ljust(10)}")
+        print("***************************************************")
+    else:
+        print("No se encontraron pedidos con los criterios de búsqueda.")
+        

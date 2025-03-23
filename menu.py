@@ -1,5 +1,5 @@
-from registro import registrar, mostrar_productos, eliminar_producto, modificar_producto
-from gestion import pedir, mostrar_pedidos, modificar_pedidos, eliminar_pedidos
+from registro import registrar, mostrar_productos, eliminar_producto, modificar_producto, buscar_productos
+from gestion import pedir, mostrar_pedidos, modificar_pedidos, eliminar_pedidos, buscar_pedidos
 
 menu_principal= """
 ************Bienvenid@ a la Panaderia delicias caceras*************
@@ -63,7 +63,7 @@ def opcion_productos():
         elif opc1=="2":
             mostrar_productos()
         elif opc1=="3":
-            print("buscar")
+            buscar_productos()
         elif opc1=="4":
             eliminar_producto() 
         elif opc1=="5":
@@ -87,7 +87,7 @@ def opcion_pedidos():
         elif opc2=="4":
             eliminar_pedidos()  
         elif opc2=="5":
-            print("")
+            buscar_pedidos()
         elif opc2=="6":
             print("Regresando al menu principal...")
             break

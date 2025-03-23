@@ -163,3 +163,57 @@ def modificar_producto():
 
         guardar_productos()
         print("Producto modificado exitosamente.")   
+def buscar_productos():
+    if not productos:
+        print("No hay productos registrados.")
+        return
+
+    print("""
+    ************ BÚSQUEDA DE PRODUCTOS ************
+    ***********************************************
+    1. Buscar por código de producto
+    2. Buscar por nombre del producto
+    3. Buscar por proveedor
+    4. Buscar por categoría
+    5. Volver al menú
+    ***********************************************
+    """)
+    
+    opcion = input("\nSeleccione una opción: ").strip()
+    resultados = []  # Se inicializa para evitar errores
+
+    if opcion == "1":
+        codigo = input("Ingrese el código del producto: ").strip().lower()
+        resultados = [p for p in productos if p["codigo_producto"].strip().lower() == codigo]
+
+    elif opcion == "2":
+        nombre = input("Ingrese el nombre del producto: ").strip().lower()
+        resultados = [p for p in productos if nombre in p["nombre"].strip().lower()]
+
+    elif opcion == "3":
+        proveedor = input("Ingrese el nombre del proveedor: ").strip().lower()
+        resultados = [p for p in productos if proveedor in p["proveedor"].strip().lower()]
+
+    elif opcion == "4":
+        categoria = input("Ingrese la categoría del producto: ").strip().lower()
+        resultados = [p for p in productos if categoria in p["categoria"].strip().lower()]
+
+    elif opcion == "5":
+        print("Volviendo al menú...")
+        return
+
+    else:
+        print("Opción inválida. Intente de nuevo.")
+        return
+
+    if resultados:
+        print("\n************ RESULTADOS DE LA BÚSQUEDA ************")
+        print(f"{'Código':<12} | {'Nombre':<20} | {'Stock':<6} | {'Precio Venta':<12} | {'Proveedor':<15} | {'Categoría':<10}")
+        print("-" * 90)
+
+        for p in resultados:
+            print(f"{p['codigo_producto']:<12} | {p['nombre']:<20} | {p['cantidad_en_stock']:<6} | ${p['precio_venta']:<12} | {p['proveedor']:<15} | {p['categoria']:<10}")
+
+        print("***********************************************************")
+    else:
+        print("No se encontraron productos con los criterios de búsqueda.")
