@@ -1,5 +1,7 @@
 import json
 
+#importar json
+
 def cargar_productos():
     try:
         with open("productos.json", "r") as file:
@@ -7,42 +9,55 @@ def cargar_productos():
     except (FileNotFoundError, json.JSONDecodeError):
         return []
     
+#funcion para cargar el archivo json    
+    
 def guardar_productos():
     if productos:
         with open("productos.json", "w") as file:
             json.dump(productos, file, indent=4)
+            
+#funcion para guardar el archivo json   
 
 productos = cargar_productos()
 
+#variable para cargar el archivo json
+
 def registrar():
-    while True:
-        opc=input("desea registrar un producto(si/no): ").lower()
-        if opc=="si": 
-            code_producto=input("ingrese el codigo del producto a registrar: "
-                                )
+    
+    while True: #bucle para sregistrar productos
+        opc=input("desea registrar un producto(si/no): ").lower() #pedir opcion para continuar con el registro de productos
+        
+        if opc=="si": #si la opcion es si ejecuta 
+            code_producto=input("ingrese el codigo del producto a registrar: " )#pide el codigo del producto a registrar
+            
             if any(p["codigo_producto"] == code_producto for p in productos):
                 print("El producto ya existe, intente con otro código.")
                 continue
+            #verifica si el producyo ya existe
 
-            else:
+            else: 
                 nombre_producto=input("ingrese el nombre del producto: ")
                 categoria=input("ingrese la categoria del producto: ")
                 descripcion= input("ingrese la descripcion de producto: ")   
                 proveedor= input("ingrese el nombre del proveedor: ")
+                #si no existe el codigo del producto pidie :nombre, categoria, descripcion, provedor 
 
                 try:
                         stock=int(input("la cantidad de stock del producto: "))
                         precio_venta=int(input("ingrese el precio de venta: "))
                         precio_provedor=int(input("ingrese el precio del provedor: "))
+                        #pide la cantidad a agregar al stock, precio de venta y precio de provedor
 
                         if stock < 0 or precio_venta < 0 or precio_provedor < 0:
                             print("Los valores numéricos deben ser positivos.")
                             continue
+                        #verifica que los valores sean mayores a 0
 
                 except ValueError:
                         print("ingrese solo valores numericos")
                         continue
-
+                         #evalua que sean datos numericos 
+                         
                 producto = {
                     "codigo_producto": code_producto,
                     "nombre": nombre_producto,
@@ -53,26 +68,38 @@ def registrar():
                     "precio_venta": precio_venta,
                     "precio_proveedor": precio_provedor
                 }
+                #crea un diccionario donde el producto guarda los datos ateriormente ingresados
                     
                 productos.append(producto)
                 guardar_productos()
                 print("el producto fue agrgado exitosamente") 
+                #guarda el diccionario en el archivo json
 
         elif opc=="no":
             print("volviendo al menu de gestion de productos...")
             break
+        #si la opcion es no termina el bucle
         else:
             print("volve a intentarlo")
+            #si la opcion no es ninguna de las 2 planteadas muestra un error
+            
+            
+#funcion para registrar los productos
 
 def mostrar_productos():
     if not productos:
         print("No hay productos registrados.")
-    else:
-        print("************Inventario de Productos************")
-        print("Código  | Nombre         | Stock | Precio Venta")
-        print("--------|---------------|-------|-------------")
-        for p in productos:
-             print(f"{p['codigo_producto'].ljust(9)} | {p['nombre'].ljust(25)} | {str(p['cantidad_en_stock']).ljust(5)} | {p['precio_venta']}")
+        return
+
+    print("\n************ INVENTARIO DE PRODUCTOS ************")
+    print(f"{'Código':<10} | {'Nombre':<25} | {'Stock':<7} | {'Precio Venta':<12}")
+    print("-" * 60)
+
+    for p in productos:
+        print(f"{p['codigo_producto']:<10} | {p['nombre']:<25} | {p['cantidad_en_stock']:<7} | ${p['precio_venta']:<12}")
+    
+    print("-" * 60)
+    #funcion para mostrar la lista de todos los productos en forma de tabla
              
 def eliminar_producto():
     code_producto = input("Ingrese el código del producto a eliminar: ")
@@ -80,19 +107,23 @@ def eliminar_producto():
     if producto_encontrado:
         productos.remove(producto_encontrado)
         guardar_productos()
-        print("El pedido fue eliminado exitosamente.")  
+        print("El producto fue eliminado exitosamente.")  
+        #funcion para eliminar un producto si el codigo existe
         
     else:
-        print("El pedido no existe o ya fue eliminado anteriormente.")       
+        print("El producto no existe o ya fue eliminado anteriormente.")   
+        #si el codigo del producto noexiste muastra un error    
         
-def modificar_producto():
-    while True:
+def modificar_producto():#funcion para modificar productos
+    while True: #inicia un bucle
         code_producto = input("Ingrese el código del producto a modificar: ")
         producto_encontrado = next((p for p in productos if p["codigo_producto"] == code_producto), None)
+        #verifica si el codigo a modificar si existe
         
         if not producto_encontrado:
             print("El producto no existe.")
             return
+        #si el producto no existe muestra un error
 
         print("""
         **************MODIFICAR PRODUCTO****************
@@ -110,7 +141,9 @@ def modificar_producto():
         ************************************************
         """      
     )
-        opcion = input("Ingrese la opccion que desea modificar: ")
+        #imprime el menu para modificar productos
+        
+        opcion = input("Ingrese la opccion que desea modificar: ") #pide una opcion
 
         if opcion == "1":
             nuevo_nombre = input("Ingrese el nuevo nombre: ")
@@ -163,7 +196,9 @@ def modificar_producto():
 
         guardar_productos()
         print("Producto modificado exitosamente.")   
-def buscar_productos():
+        #segun cada opcion modifica en el diccionario en el json
+        
+def buscar_productos(): #funcion para buscar   un producto
     if not productos:
         print("No hay productos registrados.")
         return
@@ -179,8 +214,8 @@ def buscar_productos():
     ***********************************************
     """)
     
-    opcion = input("\nSeleccione una opción: ").strip()
-    resultados = []  # Se inicializa para evitar errores
+    opcion = input("Seleccione una opción: ")
+    resultados = [] 
 
     if opcion == "1":
         codigo = input("Ingrese el código del producto: ").strip().lower()
@@ -217,3 +252,4 @@ def buscar_productos():
         print("***********************************************************")
     else:
         print("No se encontraron productos con los criterios de búsqueda.")
+    #muestra el resultado de la busqueda

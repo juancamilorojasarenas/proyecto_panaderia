@@ -1,6 +1,8 @@
 from registro import registrar, mostrar_productos, eliminar_producto, modificar_producto, buscar_productos
 from gestion import pedir, mostrar_pedidos, modificar_pedidos, eliminar_pedidos, buscar_pedidos
 
+#importa funciones desde gstion y registro para ser ejecutadas
+
 menu_principal= """
 ************Bienvenid@ a la Panaderia delicias caceras*************
 *******************************************************************
@@ -39,6 +41,7 @@ Por favor escoja la opcion deseada
 *******************************************************************
 *******************************************************************
 """
+#variables para llamar los menus
 
 def menu():
     while True:
@@ -53,6 +56,8 @@ def menu():
             break
         else:
             print("¡¡LA OPCION NO EXISTE POR FAVOR DIGITE UNA OPCCION CORRECTA!!")
+            
+#funcion para llamar las opciones del menu principal
 
 def opcion_productos():
     while True:
@@ -72,7 +77,9 @@ def opcion_productos():
             print("Regresando al menu principal...")
             break
         else:
-            print("¡¡LA OPCION NO EXISTE POR FAVOR DIGITE UNA OPCCION CORRECTA!!")       
+            print("¡¡LA OPCION NO EXISTE POR FAVOR DIGITE UNA OPCCION CORRECTA!!")  
+
+#funcion para llamar las opciones para gestionar los productos     
         
 def opcion_pedidos():
     while True:
@@ -93,3 +100,6 @@ def opcion_pedidos():
             break
         else:
             print("¡¡LA OPCION NO EXISTE POR FAVOR DIGITE UNA OPCCION CORRECTA!!") 
+            
+
+#funcion para llamar las opciones para gestionar los pedidos

@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "codigo_pedido": "001",
+        "codigo_cliente": "cl-001",
+        "fecha_pedido": "05/04/2025",
+        "detalles_pedido": [
+            {
+                "codigo_producto": "Pn-001",
+                "cantidad": 20,
+                "precio_unidad": 2200,
+                "numero_linea": 1
+            }
+        ],
+        "total": 44000
+    }
+]

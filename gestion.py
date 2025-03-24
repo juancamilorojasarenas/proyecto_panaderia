@@ -1,5 +1,6 @@
 import json
 from registro import productos, guardar_productos
+#importar json y modulacion de registro
 
 def cargar_pedidos():
     try:
@@ -7,14 +8,16 @@ def cargar_pedidos():
             return json.load(file)
     except (FileNotFoundError, json.JSONDecodeError):
         return []
+#funcion para cargar el json
 
 pedidos = cargar_pedidos()
 
 def guardar_pedidos():
     with open("pedidos.json", "w") as file:
         json.dump(pedidos, file, indent=4)
+#funcion para guardar el json
 
-def agregar_pedido():
+def agregar_pedido(): #funcion para agregar el pedido
     code_pedido = input("Ingrese el código del pedido: ")
     code_cliente = input("Ingrese el código del cliente: ")
     fecha = input("Ingrese la fecha del pedido: ")
@@ -31,7 +34,7 @@ def agregar_pedido():
     guardar_pedidos()
     print("El pedido fue agregado exitosamente.")
 
-def detalles_pedido(): 
+def detalles_pedido():  #funcion para agregar detalles en el pedido realizando verificaciones necesarias
     code_pedido = input("Ingrese el código del pedido: ")
     pedido_encontrado = next((p for p in pedidos if p["codigo_pedido"] == code_pedido), None)
 
@@ -59,6 +62,9 @@ def detalles_pedido():
         producto_encontrado["cantidad_en_stock"] -= cantidad
         guardar_productos()
 
+        if producto_encontrado["cantidad_en_stock"] < 5:
+            print(f"Quedan pocas unidades de '{producto_encontrado['nombre']}', solo hay {producto_encontrado['cantidad_en_stock']} unidades en stock.")
+        
         detalle = {
             "codigo_producto": code_producto,
             "cantidad": cantidad,
@@ -73,7 +79,7 @@ def detalles_pedido():
     else: 
         print("El pedido no existe.")
 
-def pedir():
+def pedir(): #funcion para agregar pedidos y sus opciones
     while True:
         continuar = input("¿Desea realizar un pedido (si/no)?: ").lower()
         if continuar == "si":
@@ -93,21 +99,23 @@ def pedir():
         else:
             print("Opción no disponible, intente de nuevo.")
 
-def mostrar_pedidos():
+def mostrar_pedidos(): # funcion para mostrar la lista pedidos
     if not pedidos:
-        print(" o hay pedidos registrados.")
-    else:
-        print("\n************LISTA DE PEDIDOS ************")
-        print("Código       | Cliente     | Fecha        | Total      ")
-        print("------------|------------|-------------|------------")
+        print("No hay pedidos registrados.")
+        return
 
-        for p in pedidos:
-            print(f"{p['codigo_pedido'].ljust(12)} | {p['codigo_cliente'].ljust(10)} | {p['fecha_pedido'].ljust(12)} | ${str(p['total']).ljust(10)}")
+    print("\n************ LISTA DE PEDIDOS ************")
+    print(f"{'Código':<12} | {'Cliente':<12} | {'Fecha':<12} | {'Total':<12}")
+    print("-" * 50)
 
-        print("**********************************************")
+    for p in pedidos:
+        total_formateado = f"${p['total']:,}"  # Formato con separador de miles
+        print(f"{p['codigo_pedido']:<12} | {p['codigo_cliente']:<12} | {p['fecha_pedido']:<12} | {total_formateado:<12}")
+
+    print("-" * 50)
 
 
-def modificar_pedidos():
+def modificar_pedidos(): #funcion para modificar los pedidos
     while True:
         modi = input("¿Desea modificar un pedido (si/no)?: ").lower()
         if modi == "si":
@@ -207,7 +215,7 @@ def modificar_pedidos():
         else:
             print("Opción inválida, vuelva a intentarlo.")
 
-def eliminar_pedidos():
+def eliminar_pedidos(): #funcion para eliminar pedidos
     code_pedido = input("Ingrese el código del pedido a eliminar: ")
     pedido_encontrado = next((p for p in pedidos if p["codigo_pedido"] == code_pedido), None)
 
@@ -225,7 +233,7 @@ def eliminar_pedidos():
     else:
         print("El pedido no existe o ya fue eliminado anteriormente.")
 
-modi_pedidos = """
+modi_pedidos = """ 
 **********************************************
 1. Editar detalles del pedido
 2. Editar código del cliente
@@ -233,6 +241,7 @@ modi_pedidos = """
 4. Volver al menú de gestión de pedidos
 **********************************************
 """
+#variable de modificacion de pedidos
 
 sub_menu_modi = """
 **********************************
@@ -242,7 +251,9 @@ sub_menu_modi = """
 4. Terminar modificaciones
 *********************************
 """
-def buscar_pedidos():
+#submenu de mdificaciones
+
+def buscar_pedidos(): #funcion para buscar pedidos
     if not pedidos:
         print("No hay pedidos registrados.")
         return
@@ -262,7 +273,8 @@ def buscar_pedidos():
         """
     )
     opcion = input("\nSeleccione una opción: ").strip()
-
+    resultados=[]
+    
     if opcion == "1":
         codigo = input("Ingrese el código del pedido: ").strip()
         resultados = [p for p in pedidos if p["codigo_pedido"] == codigo]

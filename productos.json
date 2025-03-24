@@ -5,8 +5,28 @@
         "categoria": "pan",
         "descripcion": "es un pan de dulce basico",
         "proveedor": "panaderia flor",
-        "cantidad_en_stock": 120,
-        "precio_venta": 2200.0,
+        "cantidad_en_stock": 100,
+        "precio_venta": 2200,
         "precio_proveedor": 2000
+    },
+    {
+        "codigo_producto": "Pn-002",
+        "nombre": "pan salado",
+        "categoria": "pan",
+        "descripcion": "es un pan de sal",
+        "proveedor": "panaderia flor",
+        "cantidad_en_stock": 300,
+        "precio_venta": 1500,
+        "precio_proveedor": 1200
+    },
+    {
+        "codigo_producto": "Pt-001",
+        "nombre": "pastel de pollo",
+        "categoria": "pastel",
+        "descripcion": "es un pastel de pollo",
+        "proveedor": "panaderia kfc",
+        "cantidad_en_stock": 50,
+        "precio_venta": 3500,
+        "precio_proveedor": 3000
     }
 ]
